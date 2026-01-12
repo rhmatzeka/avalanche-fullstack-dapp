@@ -24,7 +24,7 @@ Proyek ini adalah implementasi sistem autentikasi Web3 sederhana menggunakan Cor
   - Status Koneksi (Badge indikator).
 - [x] Penambahan identitas peserta (Nama & NIM) di dalam kartu informasi.
 
-### Task 4: Improvement (Optimasi)
+### Task 4: Improvement
 - [x] **Disable Button**: Tombol otomatis terkunci setelah berhasil koneksi.
 - [x] **Shorten Address**: Format alamat ringkas (contoh: `0x1234...abcd`).
 - [x] **Event Listeners**:
@@ -46,6 +46,6 @@ Aplikasi menggunakan tema **Modern Dark Glassmorphism** dengan fitur:
 
 ---
 
-## 👤 Identitas Peserta
+## 👤 Nama
 - **Nama Lengkap:** Rahmat Eka Satria
 - **NIM:** 231011402890
