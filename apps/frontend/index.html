@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Avalanche Nexus Portal</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="blob"></div>
+    <div class="blob-2"></div>
+
+    <div class="container">
+      <header>
+        <div class="logo">❄️</div>
+        <h1>Avalanche Portal</h1>
+        <p class="subtitle">Secure Web3 Connection</p>
+      </header>
+
+      <div class="status-badge" id="statusBadge">
+        <span class="dot"></span>
+        <span id="statusText">Disconnected</span>
+      </div>
+
+      <button id="connectBtn">Connect Core Wallet</button>
+
+      <div id="errorMsg" class="error-box" style="display: none;"></div>
+
+      <div class="card">
+        <div class="info-row">
+          <label>Wallet Address</label>
+          <p id="address" class="value">-</p>
+        </div>
+        <div class="info-row">
+          <label>Network</label>
+          <p id="network" class="value">-</p>
+        </div>
+        <div class="info-row">
+          <label>Balance</label>
+          <p class="value"><span id="balance">-</span> <span class="unit">AVAX</span></p>
+        </div>
+      </div>
+
+      <footer class="user-info">
+        <p><strong>Rahmat Eka Satria</strong></p>
+        <p>231011402890</p>
+      </footer>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
