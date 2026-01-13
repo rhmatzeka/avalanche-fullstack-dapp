@@ -112,7 +112,7 @@ if (window.ethereum) {
 
   // 2. Detect network changes
   window.ethereum.on('chainChanged', () => {
-    window.location.reload(); // Best practice: reload on chain change
+    window.location.reload(); 
   });
 }
 
