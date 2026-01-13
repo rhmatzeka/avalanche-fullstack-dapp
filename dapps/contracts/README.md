@@ -1,13 +1,221 @@
-# Sample Hardhat Project
+Paham, maksud Anda **README** yang mengikuti standar dokumentasi tugas kursus (biasanya untuk dikumpulkan di GitHub atau Portal Tugas). README ini dirancang agar instruktur/penilai bisa langsung melihat bahwa Anda telah memenuhi semua kriteria Task 1 sampai Task 4.
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+Berikut adalah draf README yang lebih formal dan terstruktur sesuai tugas Anda:
 
-Try running some of the following tasks:
+---
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.ts
+# Submission: Day 2 - Smart Contract Interaction & Access Control
+
+Repo ini berisi tugas Day 2 mengenai pengembangan Smart Contract menggunakan Solidity, penerapan Access Control, dan manajemen Event pada jaringan Avalanche Fuji Testnet.
+
+## 📝 Informasi Mahasiswa/Peserta
+
+* **Nama:** [Isi Nama Anda]
+* **Tugas:** Day 2 - SimpleStorage Upgrade
+* **Jaringan:** Avalanche Fuji Testnet (Chain ID 43113)
+
+---
+
+## 🚀 Implementasi Task
+
+### Task 1 & 4 – Ownership & Access Control
+
+Saya telah mengimplementasikan variabel `owner` yang diinisialisasi pada saat kontrak di-deploy. Untuk keamanan, saya menambahkan `modifier onlyOwner()` yang membatasi fungsi-fungsi tertentu hanya untuk pemilik kontrak.
+
+* **Status:** Selesai ✅
+* **Fitur:** `modifier onlyOwner`, variabel `owner`, dan fungsi `setValue` yang terproteksi.
+
+### Task 2 – Event Validation
+
+Kontrak ini memicu (emit) event pada momen-momen krusial untuk transparansi data di blockchain:
+
+* `OwnerSet`: Muncul saat kontrak pertama kali di-deploy (Constructor).
+* `ValueUpdated`: Muncul setiap kali fungsi `setValue` berhasil dijalankan.
+* **Status:** Selesai ✅
+
+### Task 3 – Deployment Data
+
+Kontrak telah berhasil di-deploy ulang ke Fuji Testnet dengan spesifikasi sebagai berikut:
+
+* **Contract Address:** `[PASTE ALAMAT KONTRAK ANDA DI SINI]`
+* **Explorer Link:** `https://testnet.snowtrace.io/address/[PASTE ALAMAT KONTRAK ANDA DI SINI]`
+* **ABI:** (Terlampir dalam folder proyek / Lihat di bawah)
+
+### Task 4 – State Tambahan (Advanced)
+
+Sebagai tambahan, saya menambahkan state variable `message` bertipe `string` yang juga dilengkapi dengan:
+
+* Fungsi `setMessage` (Protected by `onlyOwner`).
+* Event `MessageUpdated`.
+* **Status:** Selesai ✅
+
+---
+
+## 💻 Cara Interaksi
+
+1. **Read:** Gunakan `getValue` atau `message` untuk melihat data secara publik.
+2. **Write:** Pastikan menggunakan wallet **Owner** untuk memanggil fungsi `setValue` atau `setMessage`, jika tidak transaksi akan gagal (revert) sesuai logika `require`.
+
+---
+
+## 📄 ABI (Application Binary Interface)
+
+ABI ini diperlukan untuk interaksi frontend pada tugas Day 3:
+
+```json
+[{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "SimpleStorage",
+  "sourceName": "contracts/simple-storage.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "oldOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnerSet",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "task",
+          "type": "string"
+        }
+      ],
+      "name": "TodoAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newValue",
+          "type": "uint256"
+        }
+      ],
+      "name": "ValueUpdated",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_task",
+          "type": "string"
+        }
+      ],
+      "name": "addTodo",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getTodoCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getValue",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "setValue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "todos",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "task",
+          "type": "string"
+        },
+        {
+          "internalType": "bool",
+          "name": "isCompleted",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x6080604052348015600e575f5ffd5b505f80546001600160a01b0319163390811782556040519091907f342827c97908e5e2f71151c08502a66d44b6f758e3ac2f1de95f02eb95f0a735908290a36106308061005a5f395ff3fe608060405234801561000f575f5ffd5b506004361061006f575f3560e01c80638da5cb5b1161004d5780638da5cb5b146100a757806395ffebf5146100eb578063bc8bc2b4146100fe575f5ffd5b8063104a7cd814610073578063209652551461008a5780635524107714610092575b5f5ffd5b6002545b6040519081526020015b60405180910390f35b600154610077565b6100a56100a036600461035e565b61011f565b005b5f546100c69073ffffffffffffffffffffffffffffffffffffffff1681565b60405173ffffffffffffffffffffffffffffffffffffffff9091168152602001610081565b6100a56100f9366004610389565b6101b2565b61011161010c36600461035e565b6102a6565b60405161008192919061047f565b5f5473ffffffffffffffffffffffffffffffffffffffff1633146101765760405162461bcd60e51b81526020600482015260096024820152682737ba1037bbb732b960b91b60448201526064015b60405180910390fd5b60018190556040518181527f4273d0736f60e0dedfe745e86718093d8ec8646ebd2a60cd60643eeced565811906020015b60405180910390a150565b5f5473ffffffffffffffffffffffffffffffffffffffff1633146102045760405162461bcd60e51b81526020600482015260096024820152682737ba1037bbb732b960b91b604482015260640161016d565b604080518082019091528181525f602082018190526002805460018101825591819052825191027f405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5ace0190819061025a9082610526565b50602091909101516001909101805460ff19169115159190911790556040517fce4bc244d070cf1b8ccc7547a98a9c33f8ebfe34b7c9371596beb11e9b1e8b99906101a79083906105e1565b600281815481106102b5575f80fd5b905f5260205f2090600202015f91509050805f0180546102d4906104a2565b80601f0160208091040260200160405190810160405280929190818152602001828054610300906104a2565b801561034b5780601f106103225761010080835404028352916020019161034b565b820191905f5260205f20905b81548152906001019060200180831161032e57829003601f168201915b5050506001909301549192505060ff1682565b5f6020828403121561036e575f5ffd5b5035919050565b634e487b7160e01b5f52604160045260245ffd5b5f60208284031215610399575f5ffd5b813567ffffffffffffffff8111156103af575f5ffd5b8201601f810184136103bf575f5ffd5b803567ffffffffffffffff8111156103d9576103d9610375565b604051601f8201601f19908116603f0116810167ffffffffffffffff8111828210171561040857610408610375565b60405281815282820160200186101561041f575f5ffd5b816020840160208301375f91810160200191909152949350505050565b5f81518084525f5b8181101561046057602081850181015186830182015201610444565b505f602082860101526020601f19601f83011685010191505092915050565b604081525f610491604083018561043c565b905082151560208301529392505050565b600181811c908216806104b657607f821691505b6020821081036104d457634e487b7160e01b5f52602260045260245ffd5b50919050565b601f82111561052157805f5260205f20601f840160051c810160208510156104ff5750805b601f840160051c820191505b8181101561051e575f815560010161050b565b50505b505050565b815167ffffffffffffffff81111561054057610540610375565b6105548161054e84546104a2565b846104da565b6020601f821160018114610586575f831561056f5750848201515b5f19600385901b1c1916600184901b17845561051e565b5f84815260208120601f198516915b828110156105b55787850151825560209485019460019092019101610595565b50848210156105d257868401515f19600387901b60f8161c191681555b50505050600190811b01905550565b602081525f6105f3602083018461043c565b939250505056fea264697066735822122068953c82ca7912af2d65ac410fe91c1aad807491fa1d59cfddd95a7338288a7864736f6c634300081b0033",
+  "deployedBytecode": "0x608060405234801561000f575f5ffd5b506004361061006f575f3560e01c80638da5cb5b1161004d5780638da5cb5b146100a757806395ffebf5146100eb578063bc8bc2b4146100fe575f5ffd5b8063104a7cd814610073578063209652551461008a5780635524107714610092575b5f5ffd5b6002545b6040519081526020015b60405180910390f35b600154610077565b6100a56100a036600461035e565b61011f565b005b5f546100c69073ffffffffffffffffffffffffffffffffffffffff1681565b60405173ffffffffffffffffffffffffffffffffffffffff9091168152602001610081565b6100a56100f9366004610389565b6101b2565b61011161010c36600461035e565b6102a6565b60405161008192919061047f565b5f5473ffffffffffffffffffffffffffffffffffffffff1633146101765760405162461bcd60e51b81526020600482015260096024820152682737ba1037bbb732b960b91b60448201526064015b60405180910390fd5b60018190556040518181527f4273d0736f60e0dedfe745e86718093d8ec8646ebd2a60cd60643eeced565811906020015b60405180910390a150565b5f5473ffffffffffffffffffffffffffffffffffffffff1633146102045760405162461bcd60e51b81526020600482015260096024820152682737ba1037bbb732b960b91b604482015260640161016d565b604080518082019091528181525f602082018190526002805460018101825591819052825191027f405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5ace0190819061025a9082610526565b50602091909101516001909101805460ff19169115159190911790556040517fce4bc244d070cf1b8ccc7547a98a9c33f8ebfe34b7c9371596beb11e9b1e8b99906101a79083906105e1565b600281815481106102b5575f80fd5b905f5260205f2090600202015f91509050805f0180546102d4906104a2565b80601f0160208091040260200160405190810160405280929190818152602001828054610300906104a2565b801561034b5780601f106103225761010080835404028352916020019161034b565b820191905f5260205f20905b81548152906001019060200180831161032e57829003601f168201915b5050506001909301549192505060ff1682565b5f6020828403121561036e575f5ffd5b5035919050565b634e487b7160e01b5f52604160045260245ffd5b5f60208284031215610399575f5ffd5b813567ffffffffffffffff8111156103af575f5ffd5b8201601f810184136103bf575f5ffd5b803567ffffffffffffffff8111156103d9576103d9610375565b604051601f8201601f19908116603f0116810167ffffffffffffffff8111828210171561040857610408610375565b60405281815282820160200186101561041f575f5ffd5b816020840160208301375f91810160200191909152949350505050565b5f81518084525f5b8181101561046057602081850181015186830182015201610444565b505f602082860101526020601f19601f83011685010191505092915050565b604081525f610491604083018561043c565b905082151560208301529392505050565b600181811c908216806104b657607f821691505b6020821081036104d457634e487b7160e01b5f52602260045260245ffd5b50919050565b601f82111561052157805f5260205f20601f840160051c810160208510156104ff5750805b601f840160051c820191505b8181101561051e575f815560010161050b565b50505b505050565b815167ffffffffffffffff81111561054057610540610375565b6105548161054e84546104a2565b846104da565b6020601f821160018114610586575f831561056f5750848201515b5f19600385901b1c1916600184901b17845561051e565b5f84815260208120601f198516915b828110156105b55787850151825560209485019460019092019101610595565b50848210156105d257868401515f19600387901b60f8161c191681555b50505050600190811b01905550565b602081525f6105f3602083018461043c565b939250505056fea264697066735822122068953c82ca7912af2d65ac410fe91c1aad807491fa1d59cfddd95a7338288a7864736f6c634300081b0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
+]
+
 ```
+
+---
+
