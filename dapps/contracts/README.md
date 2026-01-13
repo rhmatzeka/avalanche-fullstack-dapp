@@ -1,6 +1,4 @@
-Paham, maksud Anda **README** yang mengikuti standar dokumentasi tugas kursus (biasanya untuk dikumpulkan di GitHub atau Portal Tugas). README ini dirancang agar instruktur/penilai bisa langsung melihat bahwa Anda telah memenuhi semua kriteria Task 1 sampai Task 4.
 
-Berikut adalah draf README yang lebih formal dan terstruktur sesuai tugas Anda:
 
 ---
 
