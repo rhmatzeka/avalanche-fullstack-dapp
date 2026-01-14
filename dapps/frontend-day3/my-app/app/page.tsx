@@ -12,9 +12,8 @@ import {
 } from 'wagmi';
 import { injected } from 'wagmi/connectors';
 import { avalancheFuji } from 'wagmi/chains';
-import { formatUnits } from 'viem'; // Tambahkan ini untuk memformat saldo
+import { formatUnits } from 'viem';
 
-// --- CONFIG ---
 const CONTRACT_ADDRESS = '0x3fa731B5499253942737c2AD452Edc08bfa1c35f';
 const SIMPLE_STORAGE_ABI = [
   { inputs: [], name: 'getValue', outputs: [{ type: 'uint256' }], stateMutability: 'view', type: 'function' },
@@ -27,151 +26,132 @@ export default function Page() {
   const { disconnect } = useDisconnect();
   const [inputValue, setInputValue] = useState('');
 
-  // Get Balance for UI (Task 4)
   const { data: balance } = useBalance({ address });
-
-  // READ Contract
   const { data: value, refetch, isLoading: isReading } = useReadContract({
-    address: CONTRACT_ADDRESS,
-    abi: SIMPLE_STORAGE_ABI,
-    functionName: 'getValue',
+    address: CONTRACT_ADDRESS, abi: SIMPLE_STORAGE_ABI, functionName: 'getValue',
   });
 
-  // WRITE Contract
   const { data: hash, writeContract, isPending: isConfirming, error: writeError } = useWriteContract();
-
-  // Wait for Transaction (Task 4)
   const { isLoading: isPendingBlock, isSuccess: isTxSuccess } = useWaitForTransactionReceipt({ hash });
 
   useEffect(() => {
-    if (isTxSuccess) {
-      refetch();
-      setInputValue('');
-    }
+    if (isTxSuccess) { refetch(); setInputValue(''); }
   }, [isTxSuccess, refetch]);
 
-  // Helper: Shorten Address (Task 4)
   const shortenAddress = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
-
-  // Helper: Format Balance dengan aman
   const displayBalance = () => {
     if (!balance) return "0.000";
-    const formatted = formatUnits(balance.value, balance.decimals);
-    return formatted.slice(0, 6);
-  };
-
-  const handleSetValue = () => {
-    if (chainId !== avalancheFuji.id) return alert("Switch to Fuji Network!");
-    if (!inputValue) return;
-
-    writeContract({
-      address: CONTRACT_ADDRESS,
-      abi: SIMPLE_STORAGE_ABI,
-      functionName: 'setValue',
-      args: [BigInt(inputValue)],
-    });
+    return formatUnits(balance.value, balance.decimals).slice(0, 6);
   };
 
   return (
-    <main className="relative min-h-screen bg-[#0a0b0d] text-white flex items-center justify-center p-6 overflow-hidden">
-      {/* Background Blobs (Sesuai style CSS kamu) */}
-      <div className="absolute top-[-100px] right-[-50px] w-[300px] h-[300px] bg-red-600/10 blur-[50px] rounded-full animate-pulse"></div>
-      <div className="absolute bottom-[-150px] left-[-100px] w-[400px] h-[400px] bg-blue-500/5 blur-[50px] rounded-full animate-pulse delay-700"></div>
+    <main className="relative h-screen w-full bg-[#050505] text-white flex items-center justify-center p-4 overflow-hidden">
+      
+      {/* --- PREMIUM ANIMATED BACKGROUND --- */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-red-600/20 blur-[100px] rounded-full animate-[pulse_6s_infinite]"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-blue-600/10 blur-[100px] rounded-full animate-[pulse_8s_infinite_1s]"></div>
+        {/* Dynamic Light Streaks */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-red-500/20 to-transparent rotate-45"></div>
+      </div>
 
-      {/* Main Container (Glassmorphism) */}
-      <div className="relative z-10 w-full max-w-[400px] bg-white/5 backdrop-blur-[20px] border border-white/10 p-8 rounded-[24px] shadow-2xl text-center">
+      {/* Glass Card Container */}
+      <div className="relative z-10 w-full max-w-[500px] bg-white/[0.02] backdrop-blur-[25px] border border-white/10 p-7 rounded-[28px] shadow-2xl transition-all">
         
-        <header className="mb-6">
-          <div className="text-4xl mb-2 text-red-500">❄️</div>
-          <h1 className="text-2xl font-bold tracking-wider">Avalanche Portal</h1>
-          <p className="text-zinc-400 text-sm">Secure Web3 Connection</p>
+        {/* Compact Header */}
+        <header className="flex items-center gap-4 mb-6">
+          <div className="w-12 h-12 bg-red-600/20 rounded-xl flex items-center justify-center border border-red-500/30 shadow-[0_0_15px_rgba(232,65,65,0.2)]">
+            <span className="text-2xl animate-[spin_10s_linear_infinite]">❄️</span>
+          </div>
+          <div className="flex-1">
+            <h1 className="text-xl font-black tracking-tight leading-none uppercase italic">Nexus Portal</h1>
+            <p className="text-[10px] text-zinc-500 font-bold tracking-[0.2em] mt-1">AVAX FUJI TESTNET</p>
+          </div>
+          <div className={`px-3 py-1 rounded-full text-[9px] font-bold border ${isConnected ? 'bg-green-500/10 border-green-500/20 text-green-500' : 'bg-zinc-500/10 border-zinc-500/20 text-zinc-500'}`}>
+            {isConnected ? '● CONNECTED' : '○ OFFLINE'}
+          </div>
         </header>
 
-        {/* Status Badge */}
-        <div className="inline-flex items-center px-4 py-1.5 bg-black/30 rounded-full text-xs mb-6 border border-white/5">
-          <span className={`w-2 h-2 rounded-full mr-2 ${isConnected ? 'bg-green-500 shadow-[0_0_10px_#4cd137]' : 'bg-zinc-500'}`}></span>
-          {isConnected ? 'Connected' : 'Disconnected'}
-        </div>
-
-        {/* Action Button */}
         {!isConnected ? (
-          <button
-            onClick={() => connect({ connector: injected() })}
+          <button 
+            onClick={() => connect({ connector: injected() })} 
             disabled={isConnecting}
-            className="w-full py-3.5 bg-[#e84142] hover:bg-[#ff4d4d] rounded-xl font-bold transition-all hover:-translate-y-1 active:scale-95 disabled:opacity-50"
+            className="w-full py-4 bg-[#e84142] hover:bg-[#ff4d4d] rounded-xl font-black text-sm tracking-widest transition-all hover:scale-[1.01] active:scale-95 shadow-lg shadow-red-900/20"
           >
-            {isConnecting ? 'Connecting...' : 'Connect Core Wallet'}
+            {isConnecting ? 'INITIALIZING...' : 'CONNECT CORE WALLET'}
           </button>
         ) : (
-          <div className="space-y-4 text-left">
-            {/* Wallet Info Card */}
-            <div className="bg-black/20 p-4 rounded-xl border border-white/5 space-y-3">
-              <div>
-                <label className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest">Wallet Address</label>
-                <p className="font-mono text-sm font-semibold">{shortenAddress(address!)}</p>
-              </div>
-              <div className="flex justify-between items-end border-t border-white/5 pt-3">
-                <div>
-                  <label className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest">Network</label>
-                  <p className="text-sm font-semibold text-red-400">
-                    {chainId === avalancheFuji.id ? 'Avalanche Fuji' : 'Wrong Network'}
-                  </p>
+          <div className="space-y-4">
+            
+            {/* Horizontal Info Grid */}
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { label: 'Wallet', val: shortenAddress(address!) },
+                { label: 'Network', val: chainId === avalancheFuji.id ? 'FUJI' : 'WRONG', color: 'text-red-400' },
+                { label: 'Balance', val: `${displayBalance()} AVAX` }
+              ].map((item, i) => (
+                <div key={i} className="bg-black/40 border border-white/5 p-2.5 rounded-xl text-center">
+                  <p className="text-[8px] text-zinc-500 font-black uppercase mb-1">{item.label}</p>
+                  <p className={`text-[11px] font-bold truncate ${item.color || 'text-zinc-200'}`}>{item.val}</p>
                 </div>
-                <div className="text-right">
-                  <label className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest">Balance</label>
-                  <p className="text-sm font-bold">
-                    {displayBalance()} <span className="text-red-500">AVAX</span>
-                  </p>
-                </div>
-              </div>
-              <button onClick={() => disconnect()} className="text-[10px] text-zinc-500 underline hover:text-red-400 transition-colors">Disconnect</button>
+              ))}
             </div>
 
-            {/* Interaction Card (Storage) */}
-            <div className="pt-4 border-t border-white/10 space-y-4">
-              <div className="text-center bg-black/20 py-4 rounded-xl border border-white/5">
-                <label className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest">Contract Value</label>
-                <p className="text-3xl font-black text-white mt-1">{isReading ? '...' : (value?.toString() || '0')}</p>
-                <button onClick={() => refetch()} className="text-[10px] text-zinc-600 hover:text-white mt-2 block w-full text-center">↻ Refresh Value</button>
+            {/* Smart Interaction Area */}
+            <div className="bg-gradient-to-br from-white/[0.04] to-transparent p-5 rounded-2xl border border-white/10">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-[9px] text-zinc-500 font-black uppercase tracking-widest">Stored Value</span>
+                <span className="text-3xl font-black text-white tracking-tighter">
+                  {isReading ? '...' : (value?.toString() || '0')}
+                </span>
               </div>
 
-              <div className="space-y-2">
-                <input
-                  type="number"
-                  placeholder="Enter value..."
-                  value={inputValue}
+              <div className="flex gap-2">
+                <input 
+                  type="number" 
+                  placeholder="New Value" 
+                  value={inputValue} 
                   onChange={(e) => setInputValue(e.target.value)}
-                  className="w-full bg-black/40 border border-white/10 p-3 rounded-xl focus:outline-none focus:border-red-500 transition-colors text-sm"
+                  className="flex-[1.5] bg-black/50 border border-white/10 p-3 rounded-xl focus:outline-none focus:border-red-500 text-sm font-bold placeholder:text-zinc-800" 
                 />
-                <button
-                  onClick={handleSetValue}
+                <button 
+                  onClick={() => writeContract({ address: CONTRACT_ADDRESS, abi: SIMPLE_STORAGE_ABI, functionName: 'setValue', args: [BigInt(inputValue)] })}
                   disabled={isConfirming || isPendingBlock || !inputValue}
-                  className="w-full py-3.5 bg-red-600 hover:bg-red-500 rounded-xl font-bold transition-all disabled:bg-zinc-800 disabled:text-zinc-600 disabled:cursor-not-allowed shadow-lg"
+                  className="flex-1 bg-white text-black hover:bg-zinc-200 rounded-xl font-black text-[11px] transition-all disabled:opacity-20 shadow-xl"
                 >
-                  {isConfirming ? 'Check Wallet...' : isPendingBlock ? 'Updating...' : 'Set New Value'}
+                  {isPendingBlock ? '...' : 'UPDATE'}
                 </button>
               </div>
             </div>
+
+            {/* Bottom Actions */}
+            <div className="flex justify-between items-center px-1">
+              <button onClick={() => disconnect()} className="text-[9px] font-bold text-zinc-600 hover:text-red-400 transition-colors uppercase tracking-widest">
+                [ Terminate Session ]
+              </button>
+              <button onClick={() => refetch()} className="text-[9px] font-bold text-zinc-400 hover:text-white transition-colors">
+                REFRESH DATA ↻
+              </button>
+            </div>
           </div>
         )}
 
-        {/* Error Message (Task 5) */}
-        {writeError && (
-          <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-[11px]">
-            {writeError.message.includes('rejected') ? 'User rejected the request.' : 'Transaction failed.'}
+        {/* Dynamic Status Notification */}
+        {(writeError || isTxSuccess) && (
+          <div className={`mt-4 p-3 rounded-xl text-[10px] font-bold border flex items-center gap-2 animate-in fade-in zoom-in duration-300 ${writeError ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-green-500/10 border-green-500/20 text-green-400'}`}>
+            <div className={`w-1.5 h-1.5 rounded-full ${writeError ? 'bg-red-500' : 'bg-green-500'}`}></div>
+            <p className="flex-1">{writeError ? 'TX REJECTED' : 'BLOCK CONFIRMED'}</p>
+            {isTxSuccess && <span className="opacity-50">✓</span>}
           </div>
         )}
 
-        {/* Success Feedback */}
-        {isTxSuccess && (
-          <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400 text-[11px]">
-            ✓ Transaction confirmed on Fuji!
-          </div>
-        )}
-
-        <footer className="mt-8 pt-6 border-t border-white/5 opacity-40">
-          <p className="text-xs font-bold tracking-widest uppercase">Rahmat Eka Satria</p>
-          <p className="text-[10px] mt-1 font-mono">231011402890</p>
+        {/* Compact Student Footer */}
+        <footer className="mt-6 pt-4 border-t border-white/5 flex justify-between items-end opacity-30">
+           <div className="leading-tight">
+              <p className="text-[9px] font-black uppercase tracking-tight">Rahmat Eka Satria</p>
+              <p className="text-[8px] font-mono">231011402890</p>
+           </div>
+           <p className="text-[7px] border border-white/20 px-1.5 py-0.5 rounded italic">Stable Build</p>
         </footer>
       </div>
     </main>
