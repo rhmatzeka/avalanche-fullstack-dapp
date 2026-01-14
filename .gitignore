@@ -1,0 +1,16 @@
+# Mengabaikan folder library yang berat
+node_modules/
+
+# Mengabaikan file env (yang berisi kunci rahasia/private key)
+.env
+.env.local
+
+# Mengabaikan hasil build/dist (output produksi)
+dist/
+build/
+.next/
+
+# Mengabaikan file log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
