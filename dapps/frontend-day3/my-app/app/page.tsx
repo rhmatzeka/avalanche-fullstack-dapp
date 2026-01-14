@@ -166,7 +166,7 @@ export default function Page() {
         {/* Transaction Notifications (Overlaid-style) */}
         {(writeError || isTxSuccess) && (
           <div className={`mt-4 p-3 rounded-xl text-[10px] font-bold border flex items-center justify-between animate-in fade-in zoom-in duration-300 ${writeError ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-green-500/10 border-green-500/20 text-green-400'}`}>
-            <span>{writeError ? '⚠️ TRANSACTION FAILED / REJECTED' : '✅ BLOCK CONFIRMED ON FUJI'}</span>
+            <span>{writeError ? 'TRANSACTION FAILED / REJECTED' : 'BLOCK CONFIRMED ON FUJI'}</span>
             <button onClick={() => window.location.reload()} className="opacity-50 hover:opacity-100">✕</button>
           </div>
         )}
