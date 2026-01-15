@@ -11,11 +11,10 @@ export class BlockchainController {
     return await this.blockchainService.getLatestValue();
   }
 
-  // Gunakan GET agar bisa langsung dipanggil di browser
   @Get("events")
   @UsePipes(new ValidationPipe({ transform: true }))
   async getEvents(@Query() query: GetEventsDto) {
-    // Jika query kosong, gunakan angka default agar tidak error BigInt
+
     const from = query.fromBlock ?? 50511090;
     const to = query.toBlock ?? 50513090;
     
