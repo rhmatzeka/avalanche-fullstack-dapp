@@ -31,7 +31,6 @@ export class BlockchainService {
 
   async getValueUpdatedEvents(fromBlock: any, toBlock: any) {
     try {
-      // Proteksi terakhir: paksa konversi ke BigInt dari Number
       const startBlock = BigInt(Number(fromBlock));
       const endBlock = BigInt(Number(toBlock));
 

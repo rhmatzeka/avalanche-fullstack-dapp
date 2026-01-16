@@ -21,7 +21,6 @@ const SIMPLE_STORAGE_ABI = [
 ] as const;
 
 export default function Page() {
-  // Fix Hydration Error
   const [mounted, setMounted] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
@@ -29,14 +28,15 @@ export default function Page() {
   const { connect, isPending: isConnecting } = useConnect();
   const { disconnect } = useDisconnect();
 
-  // Lifecycle
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const { data: balance } = useBalance({ address });
   const { data: value, refetch, isLoading: isReading } = useReadContract({
-    address: CONTRACT_ADDRESS, abi: SIMPLE_STORAGE_ABI, functionName: 'getValue',
+    address: CONTRACT_ADDRESS,
+    abi: SIMPLE_STORAGE_ABI,
+    functionName: 'getValue',
   });
 
   const { data: hash, writeContract, isPending: isConfirming, error: writeError } = useWriteContract();
@@ -49,137 +49,113 @@ export default function Page() {
     }
   }, [isTxSuccess, refetch]);
 
-  // Helpers
-  const shortenAddress = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  const shortenAddress = (addr: `0x${string}`) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   const displayBalance = () => {
-    if (!balance) return "0.000";
-    return formatUnits(balance.value, balance.decimals).slice(0, 6);
+    if (!balance) return '0.0000';
+    return parseFloat(formatUnits(balance.value, balance.decimals)).toFixed(4);
   };
 
-  // Prevent rendering dynamic wallet content until mounted to fix Hydration Issue
   if (!mounted) return null;
 
   return (
-    <main className="relative h-screen w-full bg-[#050505] text-white flex items-center justify-center p-4 overflow-hidden">
-      
-      {/* --- BACKGROUND ANIMATION --- */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-15%] left-[-5%] w-[450px] h-[450px] bg-red-600/20 blur-[100px] rounded-full animate-pulse"></div>
-        <div className="absolute bottom-[-15%] right-[-5%] w-[450px] h-[450px] bg-blue-600/10 blur-[100px] rounded-full animate-[pulse_8s_infinite_1s]"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent rotate-[35deg]"></div>
-      </div>
+    <main className="fixed inset-0 bg-[#0c0c0c] text-white flex items-center justify-center overflow-hidden p-6">
+      {/* Background minimal */}
+      <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-br from-red-950/15 via-transparent to-red-950/15" />
 
-      {/* Main Glass Card */}
-      <div className="relative z-10 w-full max-w-[480px] bg-white/[0.02] backdrop-blur-[30px] border border-white/10 p-8 rounded-[30px] shadow-2xl">
-        
-        {/* Header Section */}
-        <header className="flex items-center gap-4 mb-6">
-          <div className="w-12 h-12 bg-red-600/20 rounded-xl flex items-center justify-center border border-red-500/30 shadow-[0_0_15px_rgba(232,65,66,0.2)]">
-            <span className="text-2xl animate-[spin_12s_linear_infinite]">❄️</span>
-          </div>
-          <div className="flex-1">
-            <h1 className="text-xl font-black tracking-tight leading-none italic uppercase">Nexus Portal</h1>
-            <p className="text-[9px] text-zinc-500 font-bold tracking-[0.2em] mt-1.5 uppercase">Avalanche L1 Protocol</p>
-          </div>
-          <div className={`px-3 py-1 rounded-full text-[9px] font-black border transition-colors ${isConnected ? 'bg-green-500/10 border-green-500/20 text-green-500' : 'bg-zinc-500/10 border-zinc-500/20 text-zinc-500'}`}>
-            {isConnected ? '● ONLINE' : '○ OFFLINE'}
-          </div>
+      {/* Ultra Compact Card – max-w-xs, padding super kecil */}
+      <div className="relative z-10 w-full max-w-xs bg-black/60 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl flex flex-col p-4">
+        {/* Header super kecil */}
+        <header className="text-center mb-3">
+          <h1 className="text-2xl font-black tracking-tight uppercase text-red-500">Nexus Portal</h1>
+          <p className="text-[10px] text-zinc-400 uppercase tracking-widest">Avalanche Fuji</p>
         </header>
 
         {!isConnected ? (
-          <button 
-            onClick={() => connect({ connector: injected() })} 
-            disabled={isConnecting}
-            className="w-full py-4 bg-[#e84142] hover:bg-[#ff4d4d] rounded-xl font-black text-sm tracking-widest transition-all hover:scale-[1.01] active:scale-95"
-          >
-            {isConnecting ? 'ESTABLISHING...' : 'CONNECT CORE WALLET'}
-          </button>
+          <div className="flex-1 flex items-center justify-center">
+            <button
+              onClick={() => connect({ connector: injected() })}
+              disabled={isConnecting}
+              className="py-2 px-6 bg-red-600 hover:bg-red-500 rounded-2xl font-bold text-sm uppercase tracking-wider shadow-lg shadow-red-600/40"
+            >
+              {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+            </button>
+          </div>
         ) : (
-          <div className="space-y-4">
-            
-            {/* Info Grid (3 Columns) */}
-            <div className="grid grid-cols-3 gap-2">
-              <div className="bg-black/40 border border-white/5 p-3 rounded-xl text-center">
-                <p className="text-[8px] text-zinc-500 font-black uppercase mb-1">Wallet</p>
-                <p className="text-[11px] font-mono font-bold">{shortenAddress(address!)}</p>
+          <div className="space-y-3 text-center">
+            {/* Info – vertical ultra compact */}
+            <div className="space-y-1.5">
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-1.5">
+                <p className="text-[8px] text-zinc-400 uppercase">Wallet</p>
+                <p className="text-[10px] font-mono font-bold">{shortenAddress(address!)}</p>
               </div>
-              <div className="bg-black/40 border border-white/5 p-3 rounded-xl text-center">
-                <p className="text-[8px] text-zinc-500 font-black uppercase mb-1">Network</p>
-                <p className={`text-[10px] font-bold ${chainId === avalancheFuji.id ? 'text-red-400' : 'text-zinc-400'}`}>
-                  {chainId === avalancheFuji.id ? 'FUJI TEST' : 'WRONG NET'}
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-1.5">
+                <p className="text-[8px] text-zinc-400 uppercase">Network</p>
+                <p className={`text-[10px] font-bold ${chainId === avalancheFuji.id ? 'text-red-400' : 'text-orange-400'}`}>
+                  {chainId === avalancheFuji.id ? 'Fuji' : 'Wrong'}
                 </p>
               </div>
-              <div className="bg-black/40 border border-white/5 p-3 rounded-xl text-center">
-                <p className="text-[8px] text-zinc-500 font-black uppercase mb-1">Balance</p>
-                <p className="text-[11px] font-bold">{displayBalance()} <span className="text-red-500 text-[9px]">AVAX</span></p>
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-1.5">
+                <p className="text-[8px] text-zinc-400 uppercase">Balance</p>
+                <p className="text-[10px] font-bold">{displayBalance()} AVAX</p>
               </div>
             </div>
 
-            {/* Contract Interaction Area */}
-            <div className="bg-gradient-to-br from-white/[0.04] to-transparent p-5 rounded-2xl border border-white/10 shadow-inner">
-              <div className="flex justify-between items-end mb-4 px-1">
-                <div>
-                  <label className="text-[9px] text-zinc-500 font-black uppercase tracking-widest block mb-1">Stored Value</label>
-                  <p className="text-4xl font-black text-white tracking-tighter leading-none">
-                    {isReading ? '...' : (value?.toString() || '0')}
-                  </p>
-                </div>
-                <button 
-                  onClick={() => refetch()} 
-                  className="text-[9px] font-bold text-zinc-500 hover:text-white transition-colors"
-                >
-                  REFRESH ↻
-                </button>
-              </div>
-
-              <div className="flex gap-2">
-                <input 
-                  type="number" 
-                  placeholder="New value..." 
-                  value={inputValue} 
-                  onChange={(e) => setInputValue(e.target.value)}
-                  className="flex-[1.5] bg-black/60 border border-white/10 p-3 rounded-xl focus:outline-none focus:border-red-500 text-sm font-bold transition-all" 
-                />
-                <button 
-                  onClick={() => writeContract({ address: CONTRACT_ADDRESS, abi: SIMPLE_STORAGE_ABI, functionName: 'setValue', args: [BigInt(inputValue)] })}
-                  disabled={isConfirming || isPendingBlock || !inputValue}
-                  className="flex-1 bg-white text-black hover:bg-zinc-200 rounded-xl font-black text-[10px] transition-all disabled:opacity-20 uppercase"
-                >
-                  {isPendingBlock ? '...' : 'Update'}
-                </button>
-              </div>
-            </div>
-
-            {/* System Controls */}
-            <div className="flex justify-between items-center px-1">
-              <button onClick={() => disconnect()} className="text-[9px] font-black text-zinc-600 hover:text-red-500 transition-colors uppercase tracking-widest">
-                [ Terminate Session ]
+            {/* Stored Value */}
+            <div className="py-2">
+              <p className="text-[10px] text-zinc-400 uppercase mb-1">Stored Value</p>
+              <p className="text-3xl font-black text-red-500">
+                {isReading ? '...' : (value?.toString() || '0')}
+              </p>
+              <button
+                onClick={() => refetch()}
+                className="mt-1 text-[9px] text-zinc-400 hover:text-red-400 uppercase"
+              >
+                ↻ Refresh
               </button>
-              <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                <span className="text-[9px] font-bold text-green-500/60 uppercase">System Ready</span>
-              </div>
+            </div>
+
+            {/* Form ultra kecil */}
+            <div className="space-y-2">
+              <input
+                type="number"
+                placeholder="New value"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                className="w-full bg-white/5 border border-white/10 px-3 py-1.5 rounded-2xl focus:outline-none focus:border-red-500 text-xs font-medium placeholder-zinc-500"
+              />
+              <button
+                onClick={() => writeContract({
+                  address: CONTRACT_ADDRESS,
+                  abi: SIMPLE_STORAGE_ABI,
+                  functionName: 'setValue',
+                  args: [BigInt(inputValue || '0')],
+                })}
+                disabled={isConfirming || isPendingBlock || !inputValue}
+                className="w-full py-2 bg-red-600 hover:bg-red-500 disabled:bg-zinc-700 rounded-2xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-red-600/40 disabled:opacity-50"
+              >
+                {isPendingBlock ? 'Pending...' : 'Update Value'}
+              </button>
+              <button
+                onClick={() => disconnect()}
+                className="text-[9px] text-zinc-500 hover:text-red-400 uppercase"
+              >
+                Disconnect Wallet
+              </button>
             </div>
           </div>
         )}
 
-        {/* Transaction Notifications (Overlaid-style) */}
+        {/* Transaction Status – jika ada, muncul kecil di bawah */}
         {(writeError || isTxSuccess) && (
-          <div className={`mt-4 p-3 rounded-xl text-[10px] font-bold border flex items-center justify-between animate-in fade-in zoom-in duration-300 ${writeError ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-green-500/10 border-green-500/20 text-green-400'}`}>
-            <span>{writeError ? 'TRANSACTION FAILED / REJECTED' : 'BLOCK CONFIRMED ON FUJI'}</span>
-            <button onClick={() => window.location.reload()} className="opacity-50 hover:opacity-100">✕</button>
+          <div className={`mt-2 px-3 py-1 rounded-2xl border text-[9px] font-bold uppercase ${writeError ? 'bg-red-900/20 border-red-500/30 text-red-400' : 'bg-green-900/20 border-green-500/30 text-green-400'}`}>
+            {writeError ? 'Failed' : 'Confirmed'}
           </div>
         )}
 
-        {/* Branding Footer */}
-        <footer className="mt-8 pt-5 border-t border-white/5 flex justify-between items-center opacity-30">
-           <div>
-              <p className="text-[10px] font-black uppercase tracking-tight">Rahmat Eka Satria</p>
-              <p className="text-[8px] font-mono mt-0.5">NIM: 231011402890</p>
-           </div>
-           <div className="text-right">
-              <p className="text-[7px] border border-white/20 px-1.5 py-0.5 rounded-md font-bold uppercase">Avalanche dApp v2.0</p>
-           </div>
+        {/* Footer – super kecil */}
+        <footer className="mt-3 pt-2 border-t border-white/10 text-center text-zinc-500 text-[8px]">
+          <p className="font-bold uppercase">Rahmat Eka Satria | 231011402890</p>
+          <p className="uppercase">Avalanche dApp</p>
         </footer>
       </div>
     </main>
