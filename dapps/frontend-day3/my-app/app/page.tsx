@@ -15,6 +15,7 @@ import { avalancheFuji } from 'wagmi/chains';
 import { formatUnits } from 'viem';
 
 const CONTRACT_ADDRESS = '0x3fa731B5499253942737c2AD452Edc08bfa1c35f';
+
 const SIMPLE_STORAGE_ABI = [
   { inputs: [], name: 'getValue', outputs: [{ type: 'uint256' }], stateMutability: 'view', type: 'function' },
   { inputs: [{ name: '_value', type: 'uint256' }], name: 'setValue', outputs: [], stateMutability: 'nonpayable', type: 'function' },
