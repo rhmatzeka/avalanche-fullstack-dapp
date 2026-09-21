@@ -1,51 +1,19 @@
-# ❄️ Avalanche dApp Portal - Web3 Connection Task
+# Avalanche dApp Portal (Day 1)
 
-Proyek ini adalah implementasi sistem autentikasi Web3 sederhana menggunakan Core Wallet untuk berinteraksi dengan jaringan **Avalanche Fuji Testnet**. Dokumentasi ini mencakup penyelesaian seluruh rangkaian tugas dari Task 1 hingga Task 4.
+A simple web page that connects to **Core Wallet** and shows your wallet details on the **Avalanche Fuji testnet**.
 
-## 📝 Detail Tugas
+## What it does
 
-### Task 1: Wallet Connection
-- [x] Implementasi tombol "Connect Wallet".
-- [x] Request izin akses wallet (`eth_requestAccounts`).
-- [x] Pengambilan alamat wallet publik.
-- [x] Penyimpanan data wallet ke dalam State JavaScript.
+- **Connect Wallet** button that asks the wallet for permission (`eth_requestAccounts`)
+- Checks the network: shows **Connected** on Fuji (chain ID `0xa869`) and **Wrong Network** on anything else
+- Shows your **address** (shortened, like `0x1234...abcd`), **AVAX balance**, **network name**, and a status badge
+- Updates by itself when you **switch accounts** or **change networks**
+- The button locks after you connect, and errors show up in the page instead of a pop-up alert
 
-### Task 2: Network Validation
-- [x] Deteksi Chain ID secara otomatis menggunakan provider.
-- [x] Validasi status jaringan:
-  - **Connected**: Jika terhubung ke Avalanche Fuji (`0xa869`).
-  - **Wrong Network**: Jika terhubung ke jaringan selain Fuji.
+The design is a dark "glass" look with moving background shapes, and it works on phones too.
 
-### Task 3: UI Display
-- [x] Menampilkan data dinamis di antarmuka pengguna:
-  - Alamat Wallet.
-  - Saldo (Balance) dalam unit AVAX.
-  - Nama Jaringan.
-  - Status Koneksi (Badge indikator).
-- [x] Penambahan identitas peserta (Nama & NIM) di dalam kartu informasi.
+## How to use
 
-### Task 4: Improvement
-- [x] **Disable Button**: Tombol otomatis terkunci setelah berhasil koneksi.
-- [x] **Shorten Address**: Format alamat ringkas (contoh: `0x1234...abcd`).
-- [x] **Event Listeners**:
-  - `accountsChanged`: Update otomatis saat user mengganti akun di wallet.
-  - `chainChanged`: Auto-refresh saat user berpindah jaringan.
-- [x] **UI Error Handling**: Notifikasi error kustom yang menggantikan alert standar.
-
-## 🎨 Desain Antarmuka
-Aplikasi menggunakan tema **Modern Dark Glassmorphism** dengan fitur:
-- Efek blur transparansi tinggi.
-- Animasi latar belakang dinamis (Floating Blobs).
-- Layout sepenuhnya responsif (bisa dibuka di HP maupun Desktop).
-
-## 🛠️ Cara Menggunakan
-1. Buka `index.html` menggunakan browser yang memiliki ekstensi **Core Wallet**.
-2. Pastikan wallet sudah dalam mode jaringan **Avalanche Fuji Testnet**.
-3. Klik tombol **Connect Core Wallet**.
-4. Izinkan koneksi pada pop-up wallet yang muncul.
-
----
-
-## 👤 Nama
-- **Nama Lengkap:** Rahmat Eka Satria
-- **NIM:** 231011402890
+1. Open `index.html` in a browser with the **Core Wallet** extension.
+2. Switch the wallet to **Avalanche Fuji Testnet**.
+3. Click **Connect Core Wallet** and approve the pop-up.
