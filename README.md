@@ -60,3 +60,7 @@ The API runs on http://localhost:3000 and has interactive docs at `/documentatio
 ## Tech stack
 
 Solidity, Hardhat, Next.js, wagmi, viem, NestJS, Swagger, Avalanche Fuji
+
+## License
+
+Released under the [MIT License](LICENSE).
