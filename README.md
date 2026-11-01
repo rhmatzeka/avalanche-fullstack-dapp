@@ -4,6 +4,8 @@ A small but complete blockchain app on the **Avalanche Fuji testnet**, built ste
 
 **Live demo:** https://avalanche-fullstack-dapp-tau.vercel.app
 
+![Avalanche Fuji dApp: wallet status, events and contract value](docs/images/preview.png)
+
 ## What's inside
 
 | Folder | Day | What it does |
